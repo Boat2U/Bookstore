@@ -39,7 +39,7 @@ def jwt_decode(encoded_token, user_id: str) -> str:
 
 # class db():
 #     def __init__(self):
-#         engine = create_engine('postgresql://postgres:CJY1111804@localhost:5432/postgres')
+#         engine = create_engine('postgresql://postgres:password@localhost:5432/postgres')
 #         Base = declarative_base()
 #         DBSession = sessionmaker(bind=engine)
 #         self.session = DBSession() 
