@@ -29,10 +29,10 @@ class DBConn:
         else:
             return True
 
-    def store_id_exist(self, store_id):
-        cursor = self.session.execute("SELECT store_id FROM user_store WHERE store_id = '%s';"% (store_id,))
-        row = cursor.fetchone()
-        if row is None:
-            return False
-        else:
-            return True
+#     def store_id_exist(self, store_id):
+#         cursor = self.session.execute("SELECT store_id FROM user_store WHERE store_id = '%s';"% (store_id,))
+#         row = cursor.fetchone()
+#         if row is None:
+#             return False
+#         else:
+#             return True
