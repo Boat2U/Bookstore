@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 class DBConn:
     def __init__(self):
-        self.engine = create_engine('postgresql://postgres:860514@localhost:5432/bookstore')
+        self.engine = create_engine('postgresql://postgres:password@localhost:5432/bookstore')
         self.Base = declarative_base()
         self.metadata = MetaData()
         self.DBSession = sessionmaker(bind = self.engine)
