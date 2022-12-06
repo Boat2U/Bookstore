@@ -14,7 +14,7 @@ class DBConn:
         self.session = self.DBSession()
 
     def user_id_exist(self, user_id):
-        cursor = self.session.execute("SELECT user_id FROM user WHERE user_id = ?;", (user_id,))
+        cursor = self.session.execute("SELECT user_id FROM usr WHERE user_id = '%s';"% (user_id,))
         row = cursor.fetchone()
         if row is None:
             return False
@@ -22,7 +22,7 @@ class DBConn:
             return True
 
     def book_id_exist(self, store_id, book_id):
-        cursor = self.session.execute("SELECT book_id FROM store WHERE store_id = ? AND book_id = ?;", (store_id, book_id))
+        cursor = self.session.execute("SELECT book_id FROM store WHERE book_id = %d;"% (int(book_id),))
         row = cursor.fetchone()
         if row is None:
             return False
@@ -30,7 +30,7 @@ class DBConn:
             return True
 
     def store_id_exist(self, store_id):
-        cursor = self.session.execute("SELECT store_id FROM user_store WHERE store_id = ?;", (store_id,))
+        cursor = self.session.execute("SELECT store_id FROM user_store WHERE store_id = '%s';"% (store_id,))
         row = cursor.fetchone()
         if row is None:
             return False
