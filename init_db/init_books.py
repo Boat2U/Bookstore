@@ -39,7 +39,7 @@ class Bookinit: # 加载book info
 
 
 # 自己的数据库
-engine = create_engine('postgresql://postgres:CJY1111804@localhost:5432/postgres')
+engine = create_engine('postgresql://postgres:password@localhost:5432/postgres')
 Base = declarative_base()
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
