@@ -1,2 +1,2 @@
 # Bookstore
-CDMS Final Project: Bookstore
+CDMS Project 2: Bookstore
