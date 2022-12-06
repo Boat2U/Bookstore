@@ -1,3 +1,4 @@
+import sqlalchemy
 import sqlalchemy.exc as SQLAlchemyError
 from model import error
 from model import db_conn
@@ -9,7 +10,7 @@ class Seller(db_conn.DBConn):
         db_conn.DBConn.__init__(self)
 
     # 进书
-    def add_book(self, user_id: str, store_id: str, book_id: str, book_json_str: str, stock_level: int):
+    def add_book(self, user_id: str, store_id: str, book_id: str, price:int,book_json_str: str, stock_level: int):
         try:
             if not self.user_id_exist(user_id):
                 return error.error_non_exist_user_id(user_id)
@@ -18,13 +19,14 @@ class Seller(db_conn.DBConn):
             if self.book_id_exist(store_id, book_id):
                 return error.error_exist_book_id(book_id)
 
-            self.session.execute("INSERT into store(store_id, book_id, book_info, stock_level)"
-                              "VALUES ('%s', '%s', '%s', '%s')", (store_id, book_id, book_json_str, stock_level))
+            self.session.execute("INSERT into store(store_id, book_id, stock_level,price) VALUES ('%s', %d,  %d,%d)"% (store_id, int(book_id), stock_level,price))
             self.session.commit()
-        except SQLAlchemyError as e:
-            return 528, "{}".format(str(e))
-        except BaseException as e:
-            return 530, "{}".format(str(e))
+        except SQLAlchemyError.IntegrityError:
+            return error.error_exist_book_id(str(book_id))
+        # except SQLAlchemyError as e:
+        #     return 528, "{}".format(str(e))
+        # except BaseException as e:
+        #     return 530, "{}".format(str(e))
         return 200, "ok"
 
     # 更新书店库存
@@ -38,12 +40,15 @@ class Seller(db_conn.DBConn):
                 return error.error_non_exist_book_id(book_id)
 
             self.session.execute("UPDATE store SET stock_level = stock_level + %d "
-                              "WHERE store_id = %s AND book_id = %d", (add_stock_level, store_id, book_id))
+                              "WHERE store_id = %s AND book_id = %d"% (add_stock_level, store_id, book_id, int(book_id)))
             self.session.commit()
-        except SQLAlchemyError as e:
-            return 528, "{}".format(str(e))
-        except BaseException as e:
-            return 530, "{}".format(str(e))
+        except ValueError:
+            code, mes = error.error_non_exist_book_id(book_id)
+            return code,mes
+        # except SQLAlchemyError as e:
+        #     return 528, "{}".format(str(e))
+        # except BaseException as e:
+        #     return 530, "{}".format(str(e))
         return 200, "ok"
 
     # 开店
@@ -54,12 +59,14 @@ class Seller(db_conn.DBConn):
             if self.store_id_exist(store_id):
                 return error.error_exist_store_id(store_id)
             self.session.execute("INSERT into user_store(store_id, user_id)"
-                              "VALUES ('%s', '%s')", (store_id, user_id))
+                              "VALUES ('%s', '%s')"% (store_id, user_id))
             self.session.commit()
-        except SQLAlchemyError as e:
-            return 528, "{}".format(str(e))
-        except BaseException as e:
-            return 530, "{}".format(str(e))
+        except SQLAlchemyError.IntegrityError:
+            return error.error_exist_store_id(store_id)
+        # except SQLAlchemyError as e:
+        #     return 528, "{}".format(str(e))
+        # except BaseException as e:
+        #     return 530, "{}".format(str(e))
         return 200, "ok"
 
     # 卖家发货
