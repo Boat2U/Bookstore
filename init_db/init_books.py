@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import psycopg2
-from datetime import datetime,time
+# from datetime import datetime,time
 
 
 class Bookinit: # 加载book info
@@ -39,7 +39,11 @@ class Bookinit: # 加载book info
 
 
 # 自己的数据库
+<<<<<<< HEAD
 engine = create_engine('postgresql://postgres:860514@localhost:5432/postgres')
+=======
+engine = create_engine('postgresql://postgres:CJY1111804@localhost:5432/postgres')
+>>>>>>> ef77d9bee7c26ada3e1b3b8a51af7faf78a6ed70
 Base = declarative_base()
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
@@ -53,6 +57,7 @@ class Book(Base):
     translator = Column(Text)
     pub_year = Column(Text)
     pages = Column(Integer)
+    price = Column(Integer)
     currency_unit = Column(Text)
     binding = Column(Text)
     isbn = Column(Text)
