@@ -2,7 +2,7 @@ import  jwt
 from datetime import datetime
 import json
 import sqlalchemy
-from be.model.db import db
+import sqlalchemy.exc as SQLAlchemyError
 from be.model import error
 from be.model import db_conn
 import uuid
@@ -54,7 +54,7 @@ def jwt_encode(user_id: str, terminal: str) -> str:
         key=user_id,
         algorithm="HS256",
     )
-    return encoded.decode("utf-8")
+    return encoded.encode("utf-8").decode("utf-8")
 
 
 class DateEncoder(json.JSONEncoder):
@@ -83,12 +83,10 @@ class Buyer(db_conn.DBConn):
         try:
             # 用户id不存在
             if not self.user_id_exist(user_id):
-                code, mes = error.error_non_exist_user_id(user_id)
-                return code, mes, order_id
+                return error.error_non_exist_user_id(user_id) +  (order_id,)
             # 商铺不存在
             if not self.store_id_exist(store_id):
-                code, mes = error.error_non_exist_store_id(store_id)
-                return code, mes, order_id
+                return error.error_non_exist_store_id(store_id) +  (order_id,)
             order_id = user_id  + str(uuid.uuid1())
             book_list = []
 
@@ -128,7 +126,7 @@ class Buyer(db_conn.DBConn):
         except ValueError:
             code, mes = error.error_non_exist_book_id(book_id)
             return code, mes, " "
-        except sqlalchemy.exc.IntegrityError:
+        except SQLAlchemyError.IntegrityError:
             code, mes = error.error_duplicate_bookid()
             return code, mes, " "
 
@@ -146,7 +144,7 @@ class Buyer(db_conn.DBConn):
 
         # 查询该订单用户的余额、密码
         row = self.session.execute(
-            "SELECT balance, password FROM user WHERE user_id = '%s';" % (buyer_id)).fetchone()
+            "SELECT balance, password FROM usr WHERE user_id = '%s';" % (buyer_id)).fetchone()
         if row is None: # 用户不存在
             return error.error_non_exist_user_id(buyer_id)
         if row[0] < price: # 用户余额小于待支付订单
@@ -156,7 +154,7 @@ class Buyer(db_conn.DBConn):
         
         # 更新买家余额
         row = self.session.execute(
-            "UPDATE user set balance = balance - %d WHERE user_id = '%s' AND balance >= %d" % (
+            "UPDATE usr set balance = balance - %d WHERE user_id = '%s' AND balance >= %d" % (
                 price, buyer_id, price))
         if row.rowcount == 0:
             return error.error_not_sufficient_funds(order_id)
@@ -165,7 +163,7 @@ class Buyer(db_conn.DBConn):
         storeinfo = self.session.execute( # 找到卖家id
             "SELECT user_id FROM user_store WHERE store_id = '%s';" % (store_id,)).fetchone()
         row = self.session.execute( # 更新卖家余额
-            "UPDATE user set balance = balance + %d WHERE user_id = '%s'" % (price, storeinfo[0]))
+            "UPDATE usr set balance = balance + %d WHERE user_id = '%s'" % (price, storeinfo[0]))
         if row.rowcount == 0:
             return error.error_non_exist_user_id(buyer_id)
 
@@ -183,17 +181,18 @@ class Buyer(db_conn.DBConn):
         return 200, "ok"
 
     def add_funds(self, user_id, password, add_value):
-            user = self.session.execute("SELECT password from user where user_id='%s'" % (user_id,)).fetchone()
-            if user is None:
-                return error.error_non_exist_user_id(user_id)
-            
-            if  password != user.password:
-                return error.error_authorization_fail()# 密码错误，返回401"authorization fail."
-            self.session.execute(
-                "UPDATE user SET balance = balance + %d WHERE user_id = '%s'"%
-                (add_value, user_id))
-            self.session.commit()
-            return 200, "ok"
+        user = self.session.execute("SELECT password from usr where user_id='%s'" % (user_id,)).fetchone()
+        if user is None:
+            return error.error_non_exist_user_id(user_id)
+        
+        # if  password != user.password:
+        if  password != user.password:
+            return error.error_authorization_fail()# 密码错误，返回401"authorization fail."
+        self.session.execute(
+            "UPDATE usr SET balance = balance + %d WHERE user_id = '%s'"%
+            (add_value, user_id))
+        self.session.commit()
+        return 200, "ok"
 
     def receive_books(self, buyer_id, order_id):
         row = self.session.execute("SELECT buyer_id,status FROM new_order_paid WHERE order_id = '%s'" % (order_id,)).fetchone()
@@ -285,9 +284,9 @@ class Buyer(db_conn.DBConn):
                 self.session.execute("DELETE FROM new_order_paid WHERE order_id = '%s' and status='0'" % (order_id,))
                 # 找到商店的卖家并更新余额
                 user_id = self.session.execute("SELECT user_id FROM user_store WHERE store_id = '%s';" % (order_info[0],)).fetchone()
-                self.session.execute("UPDATE user set balance = balance - %d WHERE user_id = '%s'" % (order_info[1], user_id[0]))
+                self.session.execute("UPDATE usr set balance = balance - %d WHERE user_id = '%s'" % (order_info[1], user_id[0]))
                 # 更新买家余额
-                self.session.execute("UPDATE user set balance = balance + %d WHERE user_id = '%s'" % (order_info[1], buyer_id))
+                self.session.execute("UPDATE usr set balance = balance + %d WHERE user_id = '%s'" % (order_info[1], buyer_id))
             else: # 已发货订单无法取消
                 return error.error_invalid_order_id(order_id)
         timenow = datetime.utcnow()

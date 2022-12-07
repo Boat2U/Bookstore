@@ -25,10 +25,10 @@ class User_store(Base):
     __tablename__ = 'user_store'
     user_id = Column(String(128), ForeignKey('user.user_id'), nullable=False, index=True)
     store_id = Column(String(128), nullable=False, index=True)
-    __table_args__ = {
+    __table_args__ = (
         PrimaryKeyConstraint('user_id', 'store_id'),
         {}
-    }
+    )
 
 
 ## 书
@@ -72,7 +72,7 @@ class Store(Base):
 class New_order_paid(Base):
     __tablename__ = 'new_order_paid'
     order_id = Column(String(128), primary_key=True)
-    buyer_id = Column(String(128, ForeignKey('usr.user_id'), nullable=False))
+    buyer_id = Column(String(128), ForeignKey('usr.user_id'), nullable=False)
     store_id = Column(String(128), ForeignKey('user_store.store_id'), nullable=False)
     price = Column(Integer, nullable=False)
     purchase_time = Column(DateTime, nullable=False)
@@ -83,7 +83,7 @@ class New_order_paid(Base):
 class New_order_unpaid(Base):
     __tablename__ = 'new_order_unpaid'
     order_id = Column(String(128), primary_key=True)
-    buyer_id = Column(String(128, ForeignKey('usr.user_id'), nullable=False))
+    buyer_id = Column(String(128), ForeignKey('usr.user_id'), nullable=False)
     store_id = Column(String(128), ForeignKey('user_store.store_id'), nullable=False)
     price = Column(Integer, nullable=False)
     purchase_time = Column(DateTime, nullable=False)
@@ -93,7 +93,7 @@ class New_order_unpaid(Base):
 class New_order_canceled(Base):
     __tablename__ = 'new_order_canceled'
     order_id = Column(String(128), primary_key=True)
-    buyer_id = Column(String(128, ForeignKey('usr.user_id'), nullable=False))
+    buyer_id = Column(String(128), ForeignKey('usr.user_id'), nullable=False)
     store_id = Column(String(128), ForeignKey('user_store.store_id'), nullable=False)
     price = Column(Integer, nullable=False)
     purchase_time = Column(DateTime, nullable=False)
@@ -102,7 +102,7 @@ class New_order_canceled(Base):
 ## 订单明细表
 class New_order_detail(Base):
     __tablename__ = 'new_order_detail'
-    order_id = Column(String(128), primary_key=True)
+    order_id = Column(String(128), nullable=False)
     book_id = Column(Integer, nullable=False)
     count = Column(Integer, nullable=False)
     price = Column(Integer, nullable=False)
