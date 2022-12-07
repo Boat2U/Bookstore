@@ -37,16 +37,6 @@ def jwt_decode(encoded_token, user_id: str) -> str:
     decoded = jwt.decode(encoded_token, key=user_id, algorithms="HS256")
     return decoded
 
-<<<<<<< HEAD
-=======
-# class db():
-#     def __init__(self):
-#         engine = create_engine('postgresql://postgres:CJY1111804@localhost:5432/postgres')
-#         Base = declarative_base()
-#         DBSession = sessionmaker(bind=engine)
-#         self.session = DBSession() 
-
->>>>>>> ef77d9bee7c26ada3e1b3b8a51af7faf78a6ed70
 class User(db_conn.DBConn):
     token_lifetime: int = 3600  # 3600 second
 
@@ -81,12 +71,7 @@ class User(db_conn.DBConn):
         try:
             token = jwt_encode(user_id, terminal) # token init
             self.session.execute( 
-<<<<<<< HEAD
                 "INSERT INTO usr (user_id, password, balance, token, terminal) values (:user_id, :password, 0, :token, :terminal)",{"user_id":user_id,"password": password,"token":token,"terminal":terminal }) # 注册用户init
-=======
-                "INSERT into usr(user_id, password, balance, token, terminal) "
-                "VALUES ('%s', '%s', %d, '%s', '%s');", (user_id, password, 0, token, terminal) ) # 注册用户init
->>>>>>> ef77d9bee7c26ada3e1b3b8a51af7faf78a6ed70
             self.session.commit()
         except SQLAlchemyError.IntegrityError:
             return error.error_exist_user_id(user_id)
@@ -165,13 +150,8 @@ class User(db_conn.DBConn):
             if code != 200:
                 return code, message
 
-<<<<<<< HEAD
             cursor = self.session.execute("DELETE from usr where user_id= :uid", {'uid':user_id})
             if cursor.rowcount == 1:
-=======
-            cursor = self.session.execute("DELETE from user where user_id='%s'" % (user_id))
-            if cursor.rowcount == 1: # 用户存在，且只有一个
->>>>>>> ef77d9bee7c26ada3e1b3b8a51af7faf78a6ed70
                 self.session.commit()
             else:
                 return error.error_authorization_fail()
@@ -191,12 +171,7 @@ class User(db_conn.DBConn):
             terminal = "terminal_{}".format(str(time.time()))
             token = jwt_encode(user_id, terminal)
             cursor = self.session.execute(
-<<<<<<< HEAD
                 "UPDATE usr set password = '%s' where user_id = '%s'"%(new_password,user_id), ) # 更新密码
-=======
-                "UPDATE user set password = '%s', token= '%s' , terminal = '%s' where user_id = '%s'" % 
-                (new_password, token, terminal, user_id)) # 更新密码
->>>>>>> ef77d9bee7c26ada3e1b3b8a51af7faf78a6ed70
             if cursor is None:
                 return error.error_authorization_fail()
 
