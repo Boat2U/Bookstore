@@ -39,7 +39,7 @@ def jwt_decode(encoded_token, user_id: str) -> str:
 
 # class db():
 #     def __init__(self):
-#         engine = create_engine('postgresql://postgres:password@localhost:5432/postgres')
+#         engine = create_engine('postgresql://postgres:CJY1111804@localhost:5432/postgres')
 #         Base = declarative_base()
 #         DBSession = sessionmaker(bind=engine)
 #         self.session = DBSession() 
@@ -127,7 +127,7 @@ class User(db_conn.DBConn):
             dummy_token = jwt_encode(user_id, terminal)
 
             cursor = self.session.execute(
-                "UPDATE usr SET token = ? WHERE user_id=?", (dummy_token, user_id))
+                "UPDATE usr SET token = '%s' WHERE user_id='%s'", (dummy_token, user_id))
 
             if cursor is None:
                 return error.error_authorization_fail()
@@ -145,9 +145,9 @@ class User(db_conn.DBConn):
             if code != 200:
                 return code, message
 
-            cursor = self.conn.execute("DELETE from user where user_id='%s'" % (user_id))
+            cursor = self.session.execute("DELETE from user where user_id='%s'" % (user_id))
             if cursor.rowcount == 1: # 用户存在，且只有一个
-                self.conn.commit()
+                self.session.commit()
             else:
                 return error.error_authorization_fail()
         except SQLAlchemyError as e:
@@ -165,7 +165,7 @@ class User(db_conn.DBConn):
             terminal = "terminal_{}".format(str(time.time()))
             token = jwt_encode(user_id, terminal)
             cursor = self.session.execute(
-                "UPDATE user set password = ?, token= ? , terminal = ? where user_id = ?", 
+                "UPDATE user set password = '%s', token= '%s' , terminal = '%s' where user_id = '%s'", 
                 (new_password, token, terminal, user_id)) # 更新密码
             if cursor is None:
                 return error.error_authorization_fail()
