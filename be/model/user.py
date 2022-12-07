@@ -70,7 +70,7 @@ class User(db_conn.DBConn):
             token = jwt_encode(user_id, terminal) # token init
             self.session.execute( 
                 "INSERT into usr(user_id, password, balance, token, terminal) "
-                "VALUES (?, ?, ?, ?, ?);", (user_id, password, 0, token, terminal) ) # 注册用户init
+                "VALUES ('%s', '%s', %d, '%s', '%s');", (user_id, password, 0, token, terminal) ) # 注册用户init
             self.session.commit()
         except SQLAlchemyError:
             return error.error_exist_user_id(user_id)
@@ -127,7 +127,7 @@ class User(db_conn.DBConn):
             dummy_token = jwt_encode(user_id, terminal)
 
             cursor = self.session.execute(
-                "UPDATE usr SET token = '%s' WHERE user_id='%s'", (dummy_token, user_id))
+                "UPDATE usr SET token = '%s' WHERE user_id='%s'" % (dummy_token, user_id))
 
             if cursor is None:
                 return error.error_authorization_fail()
@@ -165,7 +165,7 @@ class User(db_conn.DBConn):
             terminal = "terminal_{}".format(str(time.time()))
             token = jwt_encode(user_id, terminal)
             cursor = self.session.execute(
-                "UPDATE user set password = '%s', token= '%s' , terminal = '%s' where user_id = '%s'", 
+                "UPDATE user set password = '%s', token= '%s' , terminal = '%s' where user_id = '%s'" % 
                 (new_password, token, terminal, user_id)) # 更新密码
             if cursor is None:
                 return error.error_authorization_fail()
@@ -176,4 +176,6 @@ class User(db_conn.DBConn):
         except BaseException as e:
             return 530, "{}".format(str(e))
         return 200, "ok"
+
+    # def search
 
