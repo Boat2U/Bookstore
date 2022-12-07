@@ -1,10 +1,10 @@
 from flask import Blueprint
 from flask import request
 from flask import jsonify
-from model.buyer import Buyer
+from be.model.buyer import Buyer
 
 bp_buyer = Blueprint("buyer", __name__, url_prefix="/buyer")
-
+import json
 
 @bp_buyer.route("/new_order", methods=["POST"])
 def new_order():
@@ -39,4 +39,30 @@ def add_funds():
     add_value = request.json.get("add_value")
     b = Buyer()
     code, message = b.add_funds(user_id, password, add_value)
+    return jsonify({"message": message}), code
+
+@bp_buyer.route("/receive_books", methods=["POST"])
+def send_books():
+    user_id: str = request.json.get("buyer_id")
+    order_id: str = request.json.get("order_id")
+
+    b = Buyer()
+    code, message = b.receive_books(user_id, order_id)
+    return jsonify({"message": message}), code
+
+@bp_buyer.route("/search_order", methods=["POST"])
+def search_order():
+    user_id: str = request.json.get("buyer_id")
+
+    b = Buyer()
+    code, message,ret = b.search_order(user_id)
+    print(json.dumps(ret))
+    return jsonify({"message": message,"history record": ret}), code
+
+@bp_buyer.route("/cancel_order", methods=["POST"])
+def cancel():
+    user_id: str = request.json.get("buyer_id")
+    order_id: str = request.json.get("order_id")
+    b = Buyer()
+    code, message = b.cancel_order(user_id,order_id)
     return jsonify({"message": message}), code
