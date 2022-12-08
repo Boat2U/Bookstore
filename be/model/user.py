@@ -393,22 +393,25 @@ class User(db_conn.DBConn):
                 "'%s' AND '%s' AND '%s'"% (title,publisher,isbn)).fetchall()
         self.session.commit()
 
-        for i in range(len(queries)):
-            query=queries[i]
-            q_title,q_author,q_publisher,q_pubyear,q_pages,q_price,q_isbn,q_bookintro,q_tags,q_picture=query
+        if len(queries)!=0:
+            for i in range(len(queries)):
+                query=queries[i]
+                q_title,q_author,q_publisher,q_pubyear,q_pages,q_price,q_isbn,q_bookintro,q_tags,q_picture=query
 
-            try:
-                picture=base64.b64decode(q_picture)
-                result.append(
-                    {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
-                    'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':picture}
-                )
-            except:
-                result.append(
-                    {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
-                    'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':''}
-                )
-        return 200,result
+                try:
+                    picture=base64.b64decode(q_picture)
+                    result.append(
+                        {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
+                        'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':picture}
+                    )
+                except:
+                    result.append(
+                        {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
+                        'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':''}
+                    )
+            return 200,result
+        else:
+            return 527,result
 
     def search_bookintro_content(self,book_intro='',content='',store_id='')->(int,[dict]):
         result=[]
@@ -446,22 +449,25 @@ class User(db_conn.DBConn):
         # q_tags=query.tags
         # q_picture=query.picture
 
-        for i in range(len(queries)):
-            query=queries[i]
-            q_title,q_author,q_publisher,q_pubyear,q_pages,q_price,q_isbn,q_bookintro,q_tags,q_picture=query
+        if len(queries)!=0:
+            for i in range(len(queries)):
+                query=queries[i]
+                q_title,q_author,q_publisher,q_pubyear,q_pages,q_price,q_isbn,q_bookintro,q_tags,q_picture=query
 
-            try:
-                picture=base64.b64decode(q_picture)
-                result.append(
-                    {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
-                    'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':picture}
-                )
-            except:
-                result.append(
-                    {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
-                    'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':''}
-                )
-        return 200,result
+                try:
+                    picture=base64.b64decode(q_picture)
+                    result.append(
+                        {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
+                        'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':picture}
+                    )
+                except:
+                    result.append(
+                        {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
+                        'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':''}
+                    )
+            return 200,result
+        else:
+            return 527,result
 
     def search_tag(self,tag='',store_id='')->(int,[dict]):
         result=[]
@@ -480,22 +486,25 @@ class User(db_conn.DBConn):
             ).fetchall()
         self.session.commit()
 
-        for i in range(len(queries)):
-            query=queries[i]
-            q_title,q_author,q_publisher,q_pubyear,q_pages,q_price,q_isbn,q_bookintro,q_tags,q_picture=query
+        if len(queries)!=0:
+            for i in range(len(queries)):
+                query=queries[i]
+                q_title,q_author,q_publisher,q_pubyear,q_pages,q_price,q_isbn,q_bookintro,q_tags,q_picture=query
 
-            try:
-                picture=base64.b64decode(q_picture)
-                result.append(
-                    {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
-                    'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':picture}
-                )
-            except:
-                result.append(
-                    {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
-                    'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':''}
-                )
-        return 200,result
+                try:
+                    picture=base64.b64decode(q_picture)
+                    result.append(
+                        {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
+                        'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':picture}
+                    )
+                except:
+                    result.append(
+                        {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
+                        'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':''}
+                    )
+            return 200,result
+        else:
+            return 527,result
 
     def search_author_store(self,author='',store_id='')->(int,[dict]): # 只店铺查找在这儿
         result=[]
@@ -524,19 +533,22 @@ class User(db_conn.DBConn):
                 ).fetchall()
         self.session.commit()
 
-        for i in range(len(queries)):
-            query=queries[i]
-            q_title,q_author,q_publisher,q_pubyear,q_pages,q_price,q_isbn,q_bookintro,q_tags,q_picture=query
+        if len(queries)!=0:
+            for i in range(len(queries)):
+                query=queries[i]
+                q_title,q_author,q_publisher,q_pubyear,q_pages,q_price,q_isbn,q_bookintro,q_tags,q_picture=query
 
-            try:
-                picture=base64.b64decode(q_picture)
-                result.append(
-                    {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
-                    'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':picture}
-                )
-            except:
-                result.append(
-                    {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
-                    'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':''}
-                )
-        return 200,result
+                try:
+                    picture=base64.b64decode(q_picture)
+                    result.append(
+                        {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
+                        'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':picture}
+                    )
+                except:
+                    result.append(
+                        {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
+                        'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':''}
+                    )
+            return 200,result
+        else:
+            return 527,result
