@@ -496,3 +496,47 @@ class User(db_conn.DBConn):
                     'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':''}
                 )
         return 200,result
+
+    def search_author_store(self,author='',store_id='')->(int,[dict]): # 只店铺查找在这儿
+        result=[]
+        if store_id=='':
+            if author=='':
+                queries=self.session.execute(
+                    "SELECT title,author,publisher,pub_year,pages,price,isbn,book_intro,tags,picture FROM book "
+                ).fetchall()
+            else:
+                queries=self.session.execute(
+                    "SELECT title,author,publisher,pub_year,pages,price,isbn,book_intro,tags,picture FROM book "
+                    "WHERE author='%s'" %(author)
+                ).fetchall()
+        else:
+            if author=='':
+                queries=self.session.execute(
+                    "SELECT title,author,publisher,pub_year,pages,price,isbn,book_intro,tags,picture FROM book "
+                    "WHERE book_id IN (SELECT book_id FROM store WHERE store_id='%s')"
+                    % (store_id)
+                ).fetchall()
+            else:
+                queries=self.session.execute(
+                    "SELECT title,author,publisher,pub_year,pages,price,isbn,book_intro,tags,picture FROM book "
+                    "WHERE author='%s' AND book_id IN (SELECT book_id FROM store WHERE store_id='%s')" 
+                    % (author,store_id)
+                ).fetchall()
+        self.session.commit()
+
+        for i in range(len(queries)):
+            query=queries[i]
+            q_title,q_author,q_publisher,q_pubyear,q_pages,q_price,q_isbn,q_bookintro,q_tags,q_picture=query
+
+            try:
+                picture=base64.b64decode(q_picture)
+                result.append(
+                    {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
+                    'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':picture}
+                )
+            except:
+                result.append(
+                    {'title':q_title,'author':q_author,'publisher':q_publisher,'pub_year':q_pubyear,'pages':q_pages,
+                    'price':q_price,'isbn':q_isbn,'book_intro':q_bookintro,'tags':q_tags,'picture':''}
+                )
+        return 200,result
