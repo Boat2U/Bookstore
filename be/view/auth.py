@@ -51,3 +51,38 @@ def change_password():
     u = user.User()
     code, message = u.change_password(user_id=user_id, old_password=old_password, new_password=new_password)
     return jsonify({"message": message}), code
+
+@bp_auth.route("/search_title_publisher_isbn", methods=["POST"])
+def search_title_publisher_isbn():
+    title = request.json.get("title", "")
+    publisher = request.json.get("publisher", "")
+    isbn = request.json.get("isbn", "")
+    store_id = request.json.get("store_id", "")
+    u = user.User()
+    code, result = u.search_title_publisher_isbn(title=title, publisher=publisher, isbn=isbn, store_id=store_id)
+    return jsonify({"message": result}), code
+
+@bp_auth.route("/search_bookintro_content", methods=["POST"])
+def search_bookintro_content():
+    book_intro = request.json.get("book_intro", "")
+    content = request.json.get("content", "")
+    store_id = request.json.get("store_id", "")
+    u = user.User()
+    code, result = u.search_bookintro_content(book_intro=book_intro, content=content, store_id=store_id)
+    return jsonify({"message": result}), code
+
+@bp_auth.route("/search_tag", methods=["POST"])
+def search_tag():
+    tag = request.json.get("tag", "")
+    store_id = request.json.get("store_id", "")
+    u = user.User()
+    code, result = u.search_tag(tag=tag, store_id=store_id)
+    return jsonify({"message": result}), code
+
+@bp_auth.route("/search_author_store", methods=["POST"])
+def search_author_store():
+    author = request.json.get("author", "")
+    store_id = request.json.get("store_id", "")
+    u = user.User()
+    code, result = u.search_author_store(author=author, store_id=store_id)
+    return jsonify({"message": result}), code
