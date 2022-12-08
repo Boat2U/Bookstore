@@ -246,5 +246,10 @@ if __name__ == '__main__':
     build_connect()
     start = datetime.datetime.now()
     bookdb.init_book_db(0, bookdb.get_book_count())
+<<<<<<< HEAD
     end = datetime.datetime.now()
     print("spend {} sec".format((end-start).seconds))
+=======
+    endtime = time.time()
+    print('创建数据库成功，共用时：',endtime-starttime)
+>>>>>>> 9cc3895abbf588c474d2fd08d81fcc0f0680b800
