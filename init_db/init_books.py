@@ -49,7 +49,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 class Book(Base):
     __tablename__ = 'book'
-    book_id = Column(Integer, primary_key=True, autoincrement=True)
+    book_id = Column(Integer, primary_key=True)
     title = Column(Text, nullable=False)
     author = Column(Text)
     publisher = Column(Text)
