@@ -47,3 +47,27 @@ class Auth:
         url = urljoin(self.url_prefix, "unregister")
         r = requests.post(url, json=json)
         return r.status_code
+
+    def search_title_publisher_isbn(self, title='',publisher='',isbn='',store_id='') -> int:
+        json = {"title": title,"publisher":publisher,"isbn":isbn,"store_id":store_id}
+        url = urljoin(self.url_prefix, "search_title_publisher_isbn")
+        r = requests.post(url, json=json)
+        return r.status_code
+
+    def search_bookintro_content(self, book_intro='',content='',store_id='') -> int:
+        json = {"book_intro": book_intro,"content":content,"store_id":store_id}
+        url = urljoin(self.url_prefix, "search_bookintro_content")
+        r = requests.post(url, json=json)
+        return r.status_code
+
+    def search_tag(self, tag='',store_id='') -> int:
+        json = {"tag": tag,"store_id":store_id}
+        url = urljoin(self.url_prefix, "search_tag")
+        r = requests.post(url, json=json)
+        return r.status_code
+
+    def search_author_store(self, author='',store_id='') -> int:
+        json = {"author": author,"store_id":store_id}
+        url = urljoin(self.url_prefix, "search_author_store")
+        r = requests.post(url, json=json)
+        return r.status_code
