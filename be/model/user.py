@@ -246,8 +246,8 @@ class User(db_conn.DBConn):
         #     return error.error_exist_user_id(user_id)
 
         # return 200, "ok"
-        terminal = "terminal_{}".format(str(time.time())) # 终端init
         try:
+            terminal = "terminal_{}".format(str(time.time())) # 终端init
             token = jwt_encode(user_id, terminal) # token init
             self.session.execute( 
                 "INSERT INTO usr (user_id, password, balance, token, terminal) values (:user_id, :password, 0, :token, :terminal)",{"user_id":user_id,"password": password,"token":token,"terminal":terminal }) # 注册用户init
@@ -293,8 +293,12 @@ class User(db_conn.DBConn):
                 return code, message, ""
 
             token = jwt_encode(user_id, terminal) # 得到token所有信息
-            self.session.execute("UPDATE usr set token= '%s' , terminal = '%s' where user_id = '%s'"% (token, terminal, user_id) )
+            cursor = self.session.execute(
+                "UPDATE usr set token= '%s' , terminal = '%s' where user_id = '%s'"
+                % (token, terminal, user_id) )
             self.session.commit()
+            if cursor is None: # 有可能不行这句话
+                return error.error_authorization_fail() + ("", )
         except SQLAlchemyError as e:
             return 528, "{}".format(str(e)), ""
         except BaseException as e:
@@ -329,7 +333,7 @@ class User(db_conn.DBConn):
             if code != 200:
                 return code, message
 
-            cursor = self.session.execute("DELETE from usr where user_id= :uid", {'uid':user_id})
+            cursor = self.session.execute("DELETE from usr where user_id='%s'"% (user_id))
             if cursor.rowcount == 1:
                 self.session.commit()
             else:
@@ -350,7 +354,9 @@ class User(db_conn.DBConn):
             terminal = "terminal_{}".format(str(time.time()))
             token = jwt_encode(user_id, terminal)
             cursor = self.session.execute(
-                "UPDATE usr set password = '%s' where user_id = '%s'"%(new_password,user_id), ) # 更新密码
+                "UPDATE usr set password = '%s', token = '%s', terminal = '%s' where user_id = '%s'"
+                %(new_password,token,terminal,user_id), ) # 更新密码
+            
             if cursor is None:
                 return error.error_authorization_fail()
 
