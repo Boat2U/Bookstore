@@ -8,9 +8,8 @@ from sqlalchemy import create_engine  #, Enum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Integer, ForeignKey, create_engine, PrimaryKeyConstraint, Text, DateTime, Boolean, LargeBinary
 from sqlalchemy.orm import sessionmaker
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-import psycopg2
+from datetime import datetime
+import datetime
 # from datetime import datetime,time
 
 
@@ -39,38 +38,35 @@ class Bookinit: # 加载book info
 
 
 # 自己的数据库
-<<<<<<< HEAD
 engine = create_engine('postgresql://postgres:860514@localhost:5432/postgres')
-=======
-engine = create_engine('postgresql://postgres:CJY1111804@localhost:5432/postgres')
->>>>>>> ef77d9bee7c26ada3e1b3b8a51af7faf78a6ed70
 Base = declarative_base()
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 class Book(Base):
     __tablename__ = 'book'
-    book_id = Column(Integer, primary_key=True, autoincrement=True)
+    book_id = Column(Integer, primary_key=True)
     title = Column(Text, nullable=False)
-    author = Column(Text)
-    publisher = Column(Text)
-    original_title = Column(Text)
-    translator = Column(Text)
-    pub_year = Column(Text)
-    pages = Column(Integer)
-    price = Column(Integer)
-    currency_unit = Column(Text)
-    binding = Column(Text)
-    isbn = Column(Text)
-    author_intro = Column(Text)
-    book_intro = Column(Text)
-    content = Column(Text)
-    tags = Column(Text)
-    picture = Column(LargeBinary)
+    author = Column(Text, nullable=True)
+    publisher = Column(Text, nullable=True)
+    original_title = Column(Text, nullable=True)
+    translator = Column(Text, nullable=True)
+    pub_year = Column(Text, nullable=True)
+    pages = Column(Integer, nullable=True)
+    price = Column(Integer, nullable=True)
+    currency_unit = Column(Text, nullable=True)
+    binding = Column(Text, nullable=True)
+    isbn = Column(Text, nullable=True)
+    author_intro = Column(Text, nullable=True)
+    book_intro = Column(Text, nullable=True)
+    content = Column(Text, nullable=True)
+    tags = Column(Text, nullable=True)
+    picture = Column(LargeBinary, nullable=True)
 
 class BookDB:
     def __init__(self):
         parent_path = os.path.dirname(os.path.dirname(__file__))
         self.book_db = os.path.join(parent_path, "fe/data/book.db")
+        # self.book_lx = os.path.join(parent_path, )
 
     def get_book_count(self):
         conn = sqlite.connect(self.book_db)
@@ -246,10 +242,9 @@ def build_connect():
     session.close()
 
 if __name__ == '__main__':
-
     bookdb = BookDB()
     build_connect()
-    starttime = time.time()
+    start = datetime.datetime.now()
     bookdb.init_book_db(0, bookdb.get_book_count())
-    endtime = time.time()
-    print('创建数据库成功，共用时：',endtime-starttime)
+    end = datetime.datetime.now()
+    print("spend {} sec".format((end-start).seconds))

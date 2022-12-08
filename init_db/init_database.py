@@ -13,7 +13,7 @@ Base = declarative_base()
 ## 用户表
 class Users(Base):
     __tablename__ = 'usr'
-    user_id = Column(String(128), primary_key=True, unique=True)
+    user_id = Column(String(128), primary_key=True)
     password = Column(String(128), nullable=False)
     balance = Column(Integer, nullable=False)
     token = Column(String(512), nullable=False)
@@ -23,8 +23,8 @@ class Users(Base):
 ## 用户-商店关系表
 class User_store(Base):
     __tablename__ = 'user_store'
-    user_id = Column(String(128), ForeignKey('user.user_id'), nullable=False, index=True)
-    store_id = Column(String(128), nullable=False, index=True)
+    user_id = Column(String(128), ForeignKey('usr.user_id'), nullable=False, index=True)
+    store_id = Column(String(128), nullable=False, unique=True, index=True)
     __table_args__ = (
         PrimaryKeyConstraint('user_id', 'store_id'),
         {}
@@ -90,13 +90,13 @@ class New_order_unpaid(Base):
 
 
 ## 已取消订单
-class New_order_canceled(Base):
+class New_order_cancel(Base):
     __tablename__ = 'new_order_canceled'
     order_id = Column(String(128), primary_key=True)
     buyer_id = Column(String(128), ForeignKey('usr.user_id'), nullable=False)
     store_id = Column(String(128), ForeignKey('user_store.store_id'), nullable=False)
     price = Column(Integer, nullable=False)
-    purchase_time = Column(DateTime, nullable=False)
+    cancel_time = Column(DateTime, nullable=False)
 
 
 ## 订单明细表
@@ -140,6 +140,9 @@ def test_sample():
         token = '***',
         terminal = 'Edge'
     )
+    session.add_all([test_user_1, test_user_2])
+    session.commit()
+
     # 创建 测试用户-商店
     test_user_store_1 = User_store(
         user_id = '小红',
@@ -149,6 +152,9 @@ def test_sample():
         user_id = '小红',
         store_id = ' 二号书店'
     )
+    session.add_all([test_user_store_1, test_user_store_2])
+    session.commit()
+
     # 创建 测试商店
     test_store_1 = Store(
         store_id = '一号书店',
@@ -162,6 +168,9 @@ def test_sample():
         stock_level = 10,
         price = 2580, # 价格单位是分
     )
+    session.add_all([test_store_1, test_store_2])
+    session.commit()
+
     # 创建 测试订单
     test_order_paid = New_order_paid(
         order_id = 'order1',
@@ -185,14 +194,14 @@ def test_sample():
         purchase_time = datetime.now(),
     )
     test_order_detail_unpaid = New_order_detail(
-        order_id = 'order1',
-        book_id = 1,
+        order_id = 'order2',
+        book_id = 2,
         count = 1,
         price = 2580
     )
-    session.add_all((test_user_1, test_user_2, test_user_store_1, test_user_store_2, test_store_1, test_store_2,
-                     test_order_paid, test_order_detail_paid, test_order_unpaid, test_order_detail_unpaid))
+    session.add_all([test_order_paid, test_order_detail_paid, test_order_unpaid, test_order_detail_unpaid])
     session.commit()
+
     session.close()
 
 if __name__ == '__main__':

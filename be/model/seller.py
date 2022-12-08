@@ -34,43 +34,43 @@ class Seller(db_conn.DBConn):
             book_id=int(book_id)
             # 书库是否有该书(注：不是商店是否存在该书,故不能用error.error_non_exist_book_id)
             row = self.session.execute("SELECT book_id FROM book WHERE book_id = '%s';" % (book_id,)).fetchone()
-            if row is None:
-                return 515, "non exist book id {}"
-
             # if row is None:
-            #     book = json.loads(book_json_str)
-            #     thelist = []  # 由于没有列表类型，故使用将列表转为text的办法
-            #     for tag in book.get('tags'):
-            #         if tag.strip() != "":
-            #             # book.tags.append(tag)
-            #             thelist.append(tag)
-            #     book['tags'] = str(thelist)  # 解析成list请使用eval(
-            #     if book.get('picture') is not None:
-            #         self.session.execute(
-            #         "INSERT into book( book_id, title,author,publisher,original_title,translator,"
-            #         "pub_year,pages,original_price,currency_unit,binding,isbn,author_intro,book_intro,"
-            #         "content,tags,picture) VALUES ( :book_id, :title,:author,:publisher,:original_title,:translator,"
-            #         ":pub_year,:pages,:original_price,:currency_unit,:binding,:isbn,:author_intro,:book_intro,"
-            #         ":content,:tags,:picture)" , {'book_id':book['id'], 'title':book['title'],'author':book['author'],
-            #          'publisher':book['publisher'],'original_title':book['original_title'],'translator':book['translator'],
-            #         'pub_year':book['pub_year'],'pages':book['pages'],'original_price':book['price'],'currency_unit':book['currency_unit'],
-            #         'binding':book['binding'],'isbn':book['isbn'],'author_intro':book['author_intro'],'book_intro':book['book_intro'],
-            #          'content':book['content'],'tags':book['tags'],'picture':book['picture']})
-            #     else:
-            #         self.session.execute(
-            #             "INSERT into book( book_id, title,author,publisher,original_title,translator,"
-            #             "pub_year,pages,original_price,currency_unit,binding,isbn,author_intro,book_intro,"
-            #             "content,tags) VALUES ( :book_id, :title,:author,:publisher,:original_title,:translator,"
-            #             ":pub_year,:pages,:original_price,:currency_unit,:binding,:isbn,:author_intro,:book_intro,"
-            #             ":content,:tags)",
-            #             {'book_id': book['id'], 'title': book['title'], 'author': book['author'],
-            #              'publisher': book['publisher'], 'original_title': book['original_title'],
-            #              'translator': book['translator'],
-            #              'pub_year': book['pub_year'], 'pages': book['pages'], 'original_price': book['price'],
-            #              'currency_unit': book['currency_unit'],
-            #              'binding': book['binding'], 'isbn': book['isbn'], 'author_intro': book['author_intro'],
-            #              'book_intro': book['book_intro'],
-            #              'content': book['content'], 'tags': book['tags']})
+            #     return 515, "non exist book id {}"
+
+            if row is None:
+                book = json.loads(book_json_str)
+                thelist = []  # 由于没有列表类型，故使用将列表转为text的办法
+                for tag in book.get('tags'):
+                    if tag.strip() != "":
+                        # book.tags.append(tag)
+                        thelist.append(tag)
+                book['tags'] = str(thelist)  # 解析成list请使用eval(
+                if book.get('picture') is not None:
+                    self.session.execute(
+                    "INSERT into book( book_id, title,author,publisher,original_title,translator,"
+                    "pub_year,pages,original_price,currency_unit,binding,isbn,author_intro,book_intro,"
+                    "content,tags,picture) VALUES ( :book_id, :title,:author,:publisher,:original_title,:translator,"
+                    ":pub_year,:pages,:original_price,:currency_unit,:binding,:isbn,:author_intro,:book_intro,"
+                    ":content,:tags,:picture)" , {'book_id':book['id'], 'title':book['title'],'author':book['author'],
+                     'publisher':book['publisher'],'original_title':book['original_title'],'translator':book['translator'],
+                    'pub_year':book['pub_year'],'pages':book['pages'],'original_price':book['price'],'currency_unit':book['currency_unit'],
+                    'binding':book['binding'],'isbn':book['isbn'],'author_intro':book['author_intro'],'book_intro':book['book_intro'],
+                     'content':book['content'],'tags':book['tags'],'picture':book['picture']})
+                else:
+                    self.session.execute(
+                        "INSERT into book( book_id, title,author,publisher,original_title,translator,"
+                        "pub_year,pages,original_price,currency_unit,binding,isbn,author_intro,book_intro,"
+                        "content,tags) VALUES ( :book_id, :title,:author,:publisher,:original_title,:translator,"
+                        ":pub_year,:pages,:original_price,:currency_unit,:binding,:isbn,:author_intro,:book_intro,"
+                        ":content,:tags)",
+                        {'book_id': book['id'], 'title': book['title'], 'author': book['author'],
+                         'publisher': book['publisher'], 'original_title': book['original_title'],
+                         'translator': book['translator'],
+                         'pub_year': book['pub_year'], 'pages': book['pages'], 'original_price': book['price'],
+                         'currency_unit': book['currency_unit'],
+                         'binding': book['binding'], 'isbn': book['isbn'], 'author_intro': book['author_intro'],
+                         'book_intro': book['book_intro'],
+                         'content': book['content'], 'tags': book['tags']})
 
 
             self.session.execute("INSERT into store(store_id, book_id, stock_level,price) VALUES ('%s', %d,  %d,%d)"% (store_id, int(book_id), stock_level,price))

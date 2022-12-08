@@ -2,7 +2,7 @@ import requests
 import simplejson
 from urllib.parse import urljoin
 from fe.access.auth import Auth
-
+from be.model.buyer import Buyer as Buyer_
 
 class Buyer:
     def __init__(self, url_prefix, user_id, password):
@@ -40,3 +40,48 @@ class Buyer:
         headers = {"token": self.token}
         r = requests.post(url, headers=headers, json=json)
         return r.status_code
+
+    def receive_books(self,buyer_id: str, order_id: str):
+        json = {
+            "buyer_id": buyer_id,
+            "order_id": order_id
+        }
+        url = urljoin(self.url_prefix, "receive_books")
+        headers = {"token": self.token}
+        r = requests.post(url, headers=headers, json=json)
+        return r.status_code
+
+    def search_order(self,buyer_id: str):
+        json = {
+            "buyer_id": buyer_id
+        }
+        url = urljoin(self.url_prefix, "search_order")
+        headers = {"token": self.token}
+        r = requests.post(url, headers=headers, json=json)
+        return r.status_code
+
+    def cancel_order(self,buyer_id: str, order_id: str):
+        json = {
+            "buyer_id": buyer_id,
+            "order_id": order_id
+        }
+        url = urljoin(self.url_prefix, "cancel_order")
+        headers = {"token": self.token}
+        r = requests.post(url, headers=headers, json=json)
+        return r.status_code
+
+    def auto_cancel(self, store_id: str, book_id_and_count: [(str, int)]) -> (int, str):####测试auto_cancel
+        books = []
+        for id_count_pair in book_id_and_count:
+            books.append({"id": id_count_pair[0], "count": id_count_pair[1]})
+        json = {"user_id": self.user_id, "store_id": store_id, "books": books}
+        #print(simplejson.dumps(json))
+        url = urljoin(self.url_prefix, "new_order")
+        headers = {"token": self.token}
+        r = requests.post(url, headers=headers, json=json)
+        response_json = r.json()
+        import time
+        time.sleep(161)#若没有说明在1s内处理完 #设大一点好跑travis
+        return Buyer_().auto_cancel([response_json.get("order_id")])
+
+
