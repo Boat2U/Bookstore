@@ -71,6 +71,5 @@ class Auth:
     def search_author_store(self, author='',store_id='') -> int:
         json = {"author": author,"store_id":store_id}
         url = urljoin(self.url_prefix, "search_author_store")
-        print(url)
         r = requests.post(url, json=json)
         return r.status_code
