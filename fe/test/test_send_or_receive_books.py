@@ -54,12 +54,6 @@ class Test_send_or_receive_books:
         code = self.buyer.receive_books(self.buyer_id+'_x',self.order_id)
         assert code != 200
 
-    def test_non_exist_store(self):
-        ok, buy_book_id_list = self.gen_book.gen(non_exist_book_id=False, low_stock_level=False)
-        assert ok
-        code, order_id = self.buyer.new_order(self.store_id + '_x', buy_book_id_list)
-        assert code != 200
-
     def test_non_exist_seller_order(self):
         code = self.seller.send_books(self.seller_id, self.order_id + '_x')
         assert code != 200

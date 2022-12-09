@@ -38,7 +38,7 @@ class Bookinit: # 加载book info
 
 
 # 自己的数据库
-engine = create_engine('postgresql://postgres:860514@localhost:5432/postgres')
+engine = create_engine('postgresql://postgres:860514@localhost:5432/bookstore')
 Base = declarative_base()
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
@@ -52,7 +52,7 @@ class Book(Base):
     translator = Column(Text, nullable=True)
     pub_year = Column(Text, nullable=True)
     pages = Column(Integer, nullable=True)
-    price = Column(Integer, nullable=True)
+    original_price = Column(Integer, nullable=True)
     currency_unit = Column(Text, nullable=True)
     binding = Column(Text, nullable=True)
     isbn = Column(Text, nullable=True)
@@ -246,10 +246,5 @@ if __name__ == '__main__':
     build_connect()
     start = datetime.datetime.now()
     bookdb.init_book_db(0, bookdb.get_book_count())
-<<<<<<< HEAD
     end = datetime.datetime.now()
     print("spend {} sec".format((end-start).seconds))
-=======
-    endtime = time.time()
-    print('创建数据库成功，共用时：',endtime-starttime)
->>>>>>> 9cc3895abbf588c474d2fd08d81fcc0f0680b800

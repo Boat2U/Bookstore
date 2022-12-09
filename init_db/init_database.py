@@ -91,7 +91,7 @@ class New_order_unpaid(Base):
 
 ## 已取消订单
 class New_order_cancel(Base):
-    __tablename__ = 'new_order_canceled'
+    __tablename__ = 'new_order_cancel'
     order_id = Column(String(128), primary_key=True)
     buyer_id = Column(String(128), ForeignKey('usr.user_id'), nullable=False)
     store_id = Column(String(128), ForeignKey('user_store.store_id'), nullable=False)
@@ -131,7 +131,7 @@ def test_sample():
         password = '123456',
         balance = 100,
         token = '***',
-        terminal = 'Chrome'
+        terminal = 'Edge'
     )
     test_user_2 = Users(
         user_id = '小蓝',
@@ -150,7 +150,7 @@ def test_sample():
     )
     test_user_store_2 = User_store(
         user_id = '小红',
-        store_id = ' 二号书店'
+        store_id = '二号书店'
     )
     session.add_all([test_user_store_1, test_user_store_2])
     session.commit()
@@ -160,13 +160,13 @@ def test_sample():
         store_id = '一号书店',
         book_id = 1,
         stock_level = 10,
-        price = 2000, # 价格单位是分
+        price = 2000 # 价格单位是分
     )
     test_store_2 = Store(
         store_id = '二号书店',
         book_id = 2,
         stock_level = 10,
-        price = 2580, # 价格单位是分
+        price = 2580 # 价格单位是分
     )
     session.add_all([test_store_1, test_store_2])
     session.commit()
@@ -191,7 +191,7 @@ def test_sample():
         buyer_id = '小蓝',
         store_id = '二号书店',
         price = 2580,
-        purchase_time = datetime.now(),
+        purchase_time = datetime.now()
     )
     test_order_detail_unpaid = New_order_detail(
         order_id = 'order2',
