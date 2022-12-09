@@ -46,9 +46,9 @@ def insert_tag():
     session = DBSession()
     Base.metadata.create_all(engine)
 
-    row = session.execute("SELECT book_id, tag FROM book;").fetchall()
+    row = session.execute("SELECT book_id, tags FROM book;").fetchall()
     for i in row:
-        temp = i.tag.replace("'", "").replace("[", "").replace("]", "").split(", ")
+        temp = i.tags.replace("'", "").replace("[", "").replace("]", "").split(", ")
         for j in temp:
             session.execute(
                 "INSERT into search_tag(tag, book_id) VALUES ('%s', %d)" % (j, int(i.book_id))

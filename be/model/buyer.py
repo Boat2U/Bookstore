@@ -66,7 +66,7 @@ class DateEncoder(json.JSONEncoder):
 
 # decode a JWT to a json string like:
 #   {
-#       "user_id": [user name],
+#       "user_id": [usr name],
 #       "terminal": [terminal code],
 #       "timestamp": [ts]} to a JWT
 #   }
@@ -281,11 +281,11 @@ class Buyer(db_conn.DBConn):
                 price = records_paid[1]
                 self.session.execute("DELETE FROM new_order_paid WHERE order_id = '%s' and status='0'" % (order_id,))
                 # 更新买家余额
-                self.session.execute("UPDATE user set balance = balance + %d WHERE user_id = '%s'" % (price, buyer_id))
+                self.session.execute("UPDATE usr set balance = balance + %d WHERE user_id = '%s'" % (price, buyer_id))
                 # 找到商店的卖家并更新余额
                 seller_id = self.session.execute("SELECT user_id FROM user_store WHERE store_id = '%s';" % (store_id,)).fetchone()
-                self.session.execute("UPDATE user set balance = balance - %d WHERE user_id = '%s'" % (price, seller_id[0]))
-                # self.session.execute("UPDATE user set balance = balance - %d WHERE user_id in (SELECT user_id FROM user_store WHERE store_id = '%s')" % (price, store_id))
+                self.session.execute("UPDATE usr set balance = balance - %d WHERE user_id = '%s'" % (price, seller_id[0]))
+                # self.session.execute("UPDATE usr set balance = balance - %d WHERE user_id in (SELECT user_id FROM user_store WHERE store_id = '%s')" % (price, store_id))
 
         now_time = datetime.utcnow()
         self.session.execute("INSERT INTO new_order_cancel(order_id, buyer_id,store_id,price,cancel_time) VALUES('%s', '%s','%s',%d,:timenow);" % (order_id, buyer_id, store_id, price), {'timenow': now_time})
