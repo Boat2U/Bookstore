@@ -23,33 +23,6 @@ class TestSearch:
         yield
 
     def test_search_random(self):
-        # assert self.auth.search_author_store(author=self.author,store_id='') == 527
-        # assert self.auth.search_author_store(store_id=self.store_id) == 527
-        # assert self.auth.search_author_store(author=self.author, store_id=self.store_id) == 527
-
-        # assert self.auth.search_bookintro_content(book_intro=self.book_intro) == 527
-        # assert self.auth.search_bookintro_content(content=self.content) == 527
-        # assert self.auth.search_bookintro_content(book_intro=self.book_intro, store_id=self.store_id) == 527
-        # assert self.auth.search_bookintro_content(content=self.content, store_id=self.store_id) == 527
-        # assert self.auth.search_bookintro_content(book_intro=self.book_intro, content=self.content, store_id=self.store_id) == 527
-        
-        # assert self.auth.search_tag(self.tag) == 527
-        # assert self.auth.search_tag(self.tag, store_id=self.store_id) == 527
-
-        # assert self.auth.search_title_publisher_isbn(title=self.title) == 527
-        # assert self.auth.search_title_publisher_isbn(publisher=self.publisher) == 527
-        # assert self.auth.search_title_publisher_isbn(isbn=self.isbn) == 527
-        # assert self.auth.search_title_publisher_isbn(title=self.title, store_id=self.store_id) == 527
-        # assert self.auth.search_title_publisher_isbn(publisher=self.publisher, store_id=self.store_id) == 527
-        # assert self.auth.search_title_publisher_isbn(isbn=self.isbn, store_id=self.store_id) == 527
-        # assert self.auth.search_title_publisher_isbn(title=self.title, isbn=self.isbn) == 527
-        # assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher) == 527
-        # assert self.auth.search_title_publisher_isbn(publisher=self.publisher, isbn=self.isbn) == 527
-        # assert self.auth.search_title_publisher_isbn(title=self.title, isbn=self.isbn, store_id=self.store_id) == 527
-        # assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, store_id=self.store_id) == 527
-        # assert self.auth.search_title_publisher_isbn(publisher=self.publisher, isbn=self.isbn, store_id=self.store_id) == 527
-        # assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, isbn=self.isbn) == 527
-        # assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, isbn=self.isbn, store_id=self.store_id) == 527
 
         assert self.auth.search_author_store(author=self.author,store_id='') == 527
         assert self.auth.search_author_store(store_id=self.store_id) == 527
@@ -92,59 +65,30 @@ class TestSearch:
         self.tag = random.choice(tags)
         self.store_id = "store_s_1_1_09eb7403-76cf-11ed-a512-1cbfc037e342" # 某一个店铺
 
-        # assert self.auth.search_author_store(author=self.author,store_id='') == 200
-        # assert self.auth.search_author_store(store_id=self.store_id) == 200
-        # assert self.auth.search_author_store(author=self.author, store_id=self.store_id) == 200
+        assert self.auth.search_author_store(author=self.author,store_id='') == 200
+        assert self.auth.search_author_store(store_id=self.store_id) == 200
+        assert self.auth.search_author_store(author=self.author, store_id=self.store_id) == 200
 
-        # assert self.auth.search_bookintro_content(book_intro=self.book_intro) == 527
-        # assert self.auth.search_bookintro_content(content=self.content) == 200
-        # assert self.auth.search_bookintro_content(book_intro=self.book_intro, store_id=self.store_id) == 527 #
-        # assert self.auth.search_bookintro_content(content=self.content, store_id=self.store_id) == 200
-        # assert self.auth.search_bookintro_content(book_intro=self.book_intro, content=self.content, store_id=self.store_id) == 527
-        
-        # assert self.auth.search_tag(self.tag) == 200
-        # assert self.auth.search_tag(self.tag, store_id=self.store_id) == 200
-
-        # assert self.auth.search_title_publisher_isbn(title=self.title) == 200
-        # assert self.auth.search_title_publisher_isbn(publisher=self.publisher) == 200
-        # assert self.auth.search_title_publisher_isbn(isbn=self.isbn) == 200
-        # assert self.auth.search_title_publisher_isbn(title=self.title, store_id=self.store_id) == 200
-        # assert self.auth.search_title_publisher_isbn(publisher=self.publisher, store_id=self.store_id) == 200
-        # assert self.auth.search_title_publisher_isbn(isbn=self.isbn, store_id=self.store_id) == 200
-        # assert self.auth.search_title_publisher_isbn(title=self.title, isbn=self.isbn) == 200
-        # assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher) == 200
-        # assert self.auth.search_title_publisher_isbn(publisher=self.publisher, isbn=self.isbn) == 200
-        # assert self.auth.search_title_publisher_isbn(title=self.title, isbn=self.isbn, store_id=self.store_id) == 200
-        # assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, store_id=self.store_id) == 200
-        # assert self.auth.search_title_publisher_isbn(publisher=self.publisher, isbn=self.isbn, store_id=self.store_id) == 200
-        # assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, isbn=self.isbn) == 200
-        # assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, isbn=self.isbn, store_id=self.store_id) == 200
-
-
-        assert self.auth.search_author_store(author=self.author,store_id='') == 500
-        assert self.auth.search_author_store(store_id=self.store_id) == 527
-        assert self.auth.search_author_store(author=self.author, store_id=self.store_id) == 527
-
-        assert self.auth.search_bookintro_content(book_intro=self.book_intro) == 500
-        assert self.auth.search_bookintro_content(content=self.content) == 500
+        assert self.auth.search_bookintro_content(book_intro=self.book_intro) == 527
+        assert self.auth.search_bookintro_content(content=self.content) == 200
         assert self.auth.search_bookintro_content(book_intro=self.book_intro, store_id=self.store_id) == 527 #
-        assert self.auth.search_bookintro_content(content=self.content, store_id=self.store_id) == 527
+        assert self.auth.search_bookintro_content(content=self.content, store_id=self.store_id) == 200
         assert self.auth.search_bookintro_content(book_intro=self.book_intro, content=self.content, store_id=self.store_id) == 527
         
-        assert self.auth.search_tag(self.tag) == 500
-        assert self.auth.search_tag(self.tag, store_id=self.store_id) == 527
+        assert self.auth.search_tag(self.tag) == 200
+        assert self.auth.search_tag(self.tag, store_id=self.store_id) == 200
 
-        assert self.auth.search_title_publisher_isbn(title=self.title) == 500
-        assert self.auth.search_title_publisher_isbn(publisher=self.publisher) == 500
-        assert self.auth.search_title_publisher_isbn(isbn=self.isbn) == 500
-        assert self.auth.search_title_publisher_isbn(title=self.title, store_id=self.store_id) == 527
-        assert self.auth.search_title_publisher_isbn(publisher=self.publisher, store_id=self.store_id) == 527
-        assert self.auth.search_title_publisher_isbn(isbn=self.isbn, store_id=self.store_id) == 527
-        assert self.auth.search_title_publisher_isbn(title=self.title, isbn=self.isbn) == 500
-        assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher) == 500
-        assert self.auth.search_title_publisher_isbn(publisher=self.publisher, isbn=self.isbn) == 500
-        assert self.auth.search_title_publisher_isbn(title=self.title, isbn=self.isbn, store_id=self.store_id) == 527
-        assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, store_id=self.store_id) == 527
-        assert self.auth.search_title_publisher_isbn(publisher=self.publisher, isbn=self.isbn, store_id=self.store_id) == 527
-        assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, isbn=self.isbn) == 500
-        assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, isbn=self.isbn, store_id=self.store_id) == 527
+        assert self.auth.search_title_publisher_isbn(title=self.title) == 200
+        assert self.auth.search_title_publisher_isbn(publisher=self.publisher) == 200
+        assert self.auth.search_title_publisher_isbn(isbn=self.isbn) == 200
+        assert self.auth.search_title_publisher_isbn(title=self.title, store_id=self.store_id) == 200
+        assert self.auth.search_title_publisher_isbn(publisher=self.publisher, store_id=self.store_id) == 200
+        assert self.auth.search_title_publisher_isbn(isbn=self.isbn, store_id=self.store_id) == 200
+        assert self.auth.search_title_publisher_isbn(title=self.title, isbn=self.isbn) == 200
+        assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher) == 200
+        assert self.auth.search_title_publisher_isbn(publisher=self.publisher, isbn=self.isbn) == 200
+        assert self.auth.search_title_publisher_isbn(title=self.title, isbn=self.isbn, store_id=self.store_id) == 200
+        assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, store_id=self.store_id) == 200
+        assert self.auth.search_title_publisher_isbn(publisher=self.publisher, isbn=self.isbn, store_id=self.store_id) == 200
+        assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, isbn=self.isbn) == 200
+        assert self.auth.search_title_publisher_isbn(title=self.title, publisher=self.publisher, isbn=self.isbn, store_id=self.store_id) == 200
